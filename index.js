@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
 
   // Your password
   password: "password",
-  database: "employeeTracker_DB"
+  database: "employeetracker_DB"
 });
 
 connection.connect(function (err) {
@@ -47,9 +47,9 @@ function employeeTracker() {
 function createDepartment() {
   inquirer
     .prompt({
-      name: "name",
       type: "input",
       message: "What do you want to name the Department?",
+      name: "name",
 
       validate: function (value) {
         if (isNaN(value) === false) {
@@ -58,97 +58,66 @@ function createDepartment() {
         return false;
       },
     })
-  createRole();
+
 }
 
 function createRole() {
   inquirer
     .prompt({
-      name: "title",
       type: "input",
       message: "What is the role title?",
-    },
-      {
-        name: "salary",
-        type: "rawlist",
-        message: "What should the starting salary be?",
-        choices: ["15", "25", "35"],
-      },
-      {
-        name: "department_id",
-        type: "insert",
-        message: "Please assign this new role a four-digit department id",
-        validate: function (value) {
-          if (isNaN(value) === false) {
-            return true;
-          }
-          return false;
-        },
-      })
-     // createEmployee();
+      name: "title",
+
+    })
+
 }
 
-
-// .then(function(answer) {
-//   // when finished prompting, insert a new item into the db with that info
-//   connection.query(
-//     "INSERT INTO auctions SET ?",
-//     {
-//       item_name: answer.item,
-//       category: answer.category,
-//       starting_bid: answer.startingBid || 0,
-//       highest_bid: answer.startingBid || 0
-//     },
-//     function(err) {
-//       if (err) throw err;
-//       console.log("Your auction was created successfully!");
-//       // re-prompt the user for if they want to bid or post
-//       start();
-//     }
-//   );
-// });
+function createEmployee() {
+  inquirer
+    .prompt([
+      {
+      type: "input",
+      message: "What is the employee's first name?",
+      name: "first",
+    }, {
+      type: "input",
+      message: "What is the employee's last name?",
+      name: "last",
+    },
 
 
 
 
 
+    
+  ])
+  }
+
+  
 
 
 
 
 
 
+// // .then(function(answer) {
+// //   // when finished prompting, insert a new item into the db with that info
+// //   connection.query(
+// //     "INSERT INTO auctions SET ?",
+// //     {
+// //       item_name: answer.item,
+// //       category: answer.category,
+// //       starting_bid: answer.startingBid || 0,
+// //       highest_bid: answer.startingBid || 0
+// //     },
+// //     function(err) {
+// //       if (err) throw err;
+// //       console.log("Your auction was created successfully!");
+// //       // re-prompt the user for if they want to bid or post
+// //       start();
+// //     }
+// //   );
+// // });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ]);
-
-// };
-
-
-
-
-// createEmployee();
-// }
-
-// function createEmployee() {
-//   inquirer
-//   .prompt({
-//   name: "employee",
-//   type: "insert",
-//   message: "What is the new employee's first name?",
-// })
-// }
 
 
