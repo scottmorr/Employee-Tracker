@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
 
   // Your password
   password: "password",
-  database: "employeetracker_DB"
+  database: "employeetracker_db"
 });
 
 connection.connect(function (err) {
@@ -31,7 +31,6 @@ function employeeTracker() {
     })
 
     .then(function (answer) {
-      // based on their answer, either call the bid or the post functions
       if (answer.action === "Department") {
         createDepartment();
       }
@@ -46,29 +45,43 @@ function employeeTracker() {
 
 function createDepartment() {
   inquirer
-    .prompt({
+    .prompt([
+      {
       type: "input",
       message: "What do you want to name the Department?",
       name: "name",
+      
 
+
+
+
+
+
+
+
+
+
+
+      
       validate: function (value) {
         if (isNaN(value) === false) {
           return true;
         }
         return false;
       },
-    })
-
+    },
+    ])
 }
 
 function createRole() {
   inquirer
-    .prompt({
+    .prompt([
+      {
       type: "input",
       message: "What is the role title?",
       name: "title",
-
-    })
+      },
+    ])
 
 }
 
@@ -76,48 +89,44 @@ function createEmployee() {
   inquirer
     .prompt([
       {
-      type: "input",
-      message: "What is the employee's first name?",
-      name: "first",
-    }, {
-      type: "input",
-      message: "What is the employee's last name?",
-      name: "last",
-    },
+        type: "input",
+        message: "What is the employee's first name?",
+        name: "first_name",
+      }, {
+        type: "input",
+        message: "What is the employee's last name?",
+        name: "last_name",
+      },
+      {
+        type: "input",
+        message: "Please assign new employye a 4 digit number",
+        name: "role_id",
+        validate: answer => {
+          const pass = answer.match(/^\d{4}$/);
+          if (pass) {
+              return true;
+          }
+          return "please enter valid 4 digit id-number"
+      }
+      }
+    ])
+    .then(function (answer) {
+      connection.query(
+        "INSERT INTO employee SET ?",
+        {
+          role_id: answer.role_id || 0,
+        },
+
+        function (err) {
+          if (err) throw err;
+          console.log("You created an authentic id successfully!");
+         start();
+        }
+      );
+    });
+}
 
 
-
-
-
-    
-  ])
-  }
-
-  
-
-
-
-
-
-
-// // .then(function(answer) {
-// //   // when finished prompting, insert a new item into the db with that info
-// //   connection.query(
-// //     "INSERT INTO auctions SET ?",
-// //     {
-// //       item_name: answer.item,
-// //       category: answer.category,
-// //       starting_bid: answer.startingBid || 0,
-// //       highest_bid: answer.startingBid || 0
-// //     },
-// //     function(err) {
-// //       if (err) throw err;
-// //       console.log("Your auction was created successfully!");
-// //       // re-prompt the user for if they want to bid or post
-// //       start();
-// //     }
-// //   );
-// // });
 
 
 
