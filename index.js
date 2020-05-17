@@ -26,32 +26,32 @@ function employeeTracker() {
     .prompt({
       name: "action",
       type: "list",
-      message: "Which would you like to create?",
+      message: "Which would you like to do? Update departments,create a role, or view employee list?",
       choices: ["Department", "Role", "Employee"]
     })
 
     .then(function (answer) {
       if (answer.action === "Department") {
-        createDepartment();
+        updateDepartment();
       }
       else if (answer.action === "Role") {
         createRole();
       } else {
         answer.action === "Employee"
-        createEmployee();
+        viewEmployee();
       }
     });
 }
 
-function createDepartment() {
+function updateDepartment() {
   inquirer
     .prompt([
       {
-      type: "input",
-      message: "What do you want to name the Department?",
-      name: "name",
-      
-    },
+        type: "input",
+        message: "What do you want to name the Department?",
+        name: "name",
+
+      },
     ])
 }
 
@@ -59,87 +59,59 @@ function createRole() {
   inquirer
     .prompt([
       {
-      type: "input",
-      message: "What is the role title?",
-      name: "rollTitle",
+        type: "input",
+        message: "What is the role title?",
+        name: "rollTitle",
       },
-    
+
       {
         type: "input",
         message: "What is the salary per??",
         name: "hourlySalary",
-        },
-    
-        {
-          type: "input",
-          message: "What is the department id?",
-          name: "departmentId",
-          },
+      },
+
+      {
+        type: "input",
+        message: "What is the department id?",
+        name: "departmentId",
+      },
 
     ])
-    .then(function(answer) {
+    .then(function (answer) {
       // when finished prompting, insert a new item into the db with that info
       connection.query(
         "INSERT INTO role SET ?",
         {
           title: answer.rollTitle,
           salary: answer.hourlySalary,
-          department_id:answer.departmentId,
-          
+          department_id: answer.departmentId,
+
         },
-        function(err) {
+        function (err) {
           if (err) throw err;
           console.log("You created a new role without the help of your weekly tutor!!!!!!!!");
           // re-prompt the user for if they want to bid or post
-         // start();
+          // start();
         }
       );
     });
-    
-       };
-  
+
+};
 
 
-function createEmployee() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "What is the employee's first name?",
-        name: "first_name",
-      }, {
-        type: "input",
-        message: "What is the employee's last name?",
-        name: "last_name",
-      },
-    //   {
-    //     type: "input",
-    //     message: "Please assign new employye a 4 digit number",
-    //     name: "role_id",
-    //     validate: answer => {
-    //       const pass = answer.match(/^\d{4}$/);
-    //       if (pass) {
-    //           return true;
-    //       }
-    //       return "please enter valid 4 digit id-number"
-    //   }
-    //   }
-     ])
-    // .then(function (answer) {
-    //   connection.query(
-    //     "INSERT INTO employee SET ?",
-    //     {
-    //       role_id: answer.role_id || 0,
-    //     },
 
-    //     function (err) {
-    //       if (err) throw err;
-    //       console.log("You created an authentic id successfully!");
-    //      start();
-    //     }
-    //   );
-    // });
+function viewEmployee() {
+
+
+  // function readProducts() {
+  console.log("Selecting all products...\n");
+  connection.query("SELECT * FROM employee", function (err, res) {
+    if (err) throw err;
+    // Log all results of the SELECT statement
+    console.log(res);
+    connection.end();
+  })
+
 }
-
 
 
