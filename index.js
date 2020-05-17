@@ -51,24 +51,6 @@ function createDepartment() {
       message: "What do you want to name the Department?",
       name: "name",
       
-
-
-
-
-
-
-
-
-
-
-
-      
-      validate: function (value) {
-        if (isNaN(value) === false) {
-          return true;
-        }
-        return false;
-      },
     },
     ])
 }
@@ -79,11 +61,44 @@ function createRole() {
       {
       type: "input",
       message: "What is the role title?",
-      name: "title",
+      name: "rollTitle",
       },
-    ])
+    
+      {
+        type: "input",
+        message: "What is the salary per??",
+        name: "hourlySalary",
+        },
+    
+        {
+          type: "input",
+          message: "What is the department id?",
+          name: "departmentId",
+          },
 
-}
+    ])
+    .then(function(answer) {
+      // when finished prompting, insert a new item into the db with that info
+      connection.query(
+        "INSERT INTO role SET ?",
+        {
+          title: answer.rollTitle,
+          salary: answer.hourlySalary,
+          department_id:answer.departmentId,
+          
+        },
+        function(err) {
+          if (err) throw err;
+          console.log("You created a new role without the help of your weekly tutor!!!!!!!!");
+          // re-prompt the user for if they want to bid or post
+         // start();
+        }
+      );
+    });
+    
+       };
+  
+
 
 function createEmployee() {
   inquirer
@@ -97,36 +112,34 @@ function createEmployee() {
         message: "What is the employee's last name?",
         name: "last_name",
       },
-      {
-        type: "input",
-        message: "Please assign new employye a 4 digit number",
-        name: "role_id",
-        validate: answer => {
-          const pass = answer.match(/^\d{4}$/);
-          if (pass) {
-              return true;
-          }
-          return "please enter valid 4 digit id-number"
-      }
-      }
-    ])
-    .then(function (answer) {
-      connection.query(
-        "INSERT INTO employee SET ?",
-        {
-          role_id: answer.role_id || 0,
-        },
+    //   {
+    //     type: "input",
+    //     message: "Please assign new employye a 4 digit number",
+    //     name: "role_id",
+    //     validate: answer => {
+    //       const pass = answer.match(/^\d{4}$/);
+    //       if (pass) {
+    //           return true;
+    //       }
+    //       return "please enter valid 4 digit id-number"
+    //   }
+    //   }
+     ])
+    // .then(function (answer) {
+    //   connection.query(
+    //     "INSERT INTO employee SET ?",
+    //     {
+    //       role_id: answer.role_id || 0,
+    //     },
 
-        function (err) {
-          if (err) throw err;
-          console.log("You created an authentic id successfully!");
-         start();
-        }
-      );
-    });
+    //     function (err) {
+    //       if (err) throw err;
+    //       console.log("You created an authentic id successfully!");
+    //      start();
+    //     }
+    //   );
+    // });
 }
-
-
 
 
 
