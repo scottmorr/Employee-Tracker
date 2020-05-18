@@ -1,17 +1,12 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var consoletable = require("console.table");
-// create the connection information for the sql database
 var connection = mysql.createConnection({
   host: "localhost",
-
-  // Your port; if not 3306
   port: 3306,
 
-  // Your username
   user: "root",
 
-  // Your password
   password: "password",
   database: "employeetracker_db"
 });
@@ -26,7 +21,7 @@ function employeeTracker() {
     .prompt({
       name: "action",
       type: "list",
-      message: "Which would you like to do? Update departments,create a role, or view employee list?",
+      message: "Which would you like to do? Update Hiring Department, create a role, or view employee list?",
       choices: ["Department", "Role", "Employee"]
     })
 
@@ -58,23 +53,19 @@ function updateDepartment(answer) {
         "UPDATE department SET ? WHERE ?",
         [
           {
-            name: "new hires",
+            name: "new lucky hires",
          
           },
          {
            id: 1
          }
-
-
-
-
-
         ],
         function(err, res) {
           if (err) throw err;
-          console.log(res.affectedRows + " department updated!\n");
-
+          console.log(res.affectedRows + " Hiring Department updated!\n");
+        employeeTracker();
         });
+        
 }
 
 function createRole() {
@@ -82,25 +73,24 @@ function createRole() {
     .prompt([
       {
         type: "input",
-        message: "What is the role title?",
+        message: "What is the new role title?",
         name: "rollTitle",
       },
 
       {
         type: "input",
-        message: "What is the salary per??",
+        message: "What is the salary per hour for new role?",
         name: "hourlySalary",
       },
 
       {
         type: "input",
-        message: "What is the department id?",
+        message: "What is the department id for this new role?",
         name: "departmentId",
       },
 
     ])
     .then(function (answer) {
-      // when finished prompting, insert a new item into the db with that info
       connection.query(
         "INSERT INTO role SET ?",
         {
@@ -111,11 +101,11 @@ function createRole() {
         },
         function (err) {
           if (err) throw err;
-          console.log("You created a new role without the help of your weekly tutor!!!!!!!!");          
+          console.log("You created a new role");          
+       employeeTracker();
         }
       );
     });
-
 };
 
 
@@ -126,48 +116,10 @@ function viewEmployee() {
     // Log all results of the SELECT statement
     console.log(res);
     connection.end();
+employeeTracker();
   })
 }
 
 
 
 
-// function updateDepartment() {
-//   console.log("Inserting a new department...\n");
-//   var query = connection.query(
-//     "INSERT INTO department SET ?",
-//     {
-//      // id: "Rocky Road",
-//       name: new hires,
-//     },
-//     function(err, res) {
-//       if (err) throw err;
-//       console.log(res.affectedRows + " department inserted!\n");
-//       // Call updateProduct AFTER the INSERT completes
-//       updateProduct();
-//     }
-//   );
-
-//   // logs the actual query being run
-//   console.log(query.sql);
-// }
-
-// function updateProduct() {
-//   console.log("Updating all Rocky Road quantities...\n");
-//   var query = connection.query(
-//     "UPDATE products SET ? WHERE ?",
-//     [
-//       {
-//         quantity: 100
-//       },
-//       {
-//         flavor: "Rocky Road"
-//       }
-//     ],
-//     function(err, res) {
-//       if (err) throw err;
-//       console.log(res.affectedRows + " products updated!\n");
-//       // Call deleteProduct AFTER the UPDATE completes
-//       deleteProduct();
-//     }
-//   );
