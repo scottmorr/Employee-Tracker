@@ -43,16 +43,38 @@ function employeeTracker() {
     });
 }
 
-function updateDepartment() {
+function updateDepartment(answer) {
   inquirer
     .prompt([
       {
         type: "input",
-        message: "What do you want to name the Department?",
-        name: "name",
+        message: "What do you want to rename the Hiring Department?",
+        name: "newName",
 
       },
-    ])
+   ])
+   // console.log("What do you want to rename the Hiring Department...\n");
+      var query = connection.query(
+        "UPDATE department SET ? WHERE ?",
+        [
+          {
+            name: "new hires",
+         
+          },
+         {
+           id: 1
+         }
+
+
+
+
+
+        ],
+        function(err, res) {
+          if (err) throw err;
+          console.log(res.affectedRows + " department updated!\n");
+
+        });
 }
 
 function createRole() {
@@ -89,9 +111,7 @@ function createRole() {
         },
         function (err) {
           if (err) throw err;
-          console.log("You created a new role without the help of your weekly tutor!!!!!!!!");
-          // re-prompt the user for if they want to bid or post
-          // start();
+          console.log("You created a new role without the help of your weekly tutor!!!!!!!!");          
         }
       );
     });
@@ -99,11 +119,7 @@ function createRole() {
 };
 
 
-
 function viewEmployee() {
-
-
-  // function readProducts() {
   console.log("Selecting all products...\n");
   connection.query("SELECT * FROM employee", function (err, res) {
     if (err) throw err;
@@ -111,7 +127,47 @@ function viewEmployee() {
     console.log(res);
     connection.end();
   })
-
 }
 
 
+
+
+// function updateDepartment() {
+//   console.log("Inserting a new department...\n");
+//   var query = connection.query(
+//     "INSERT INTO department SET ?",
+//     {
+//      // id: "Rocky Road",
+//       name: new hires,
+//     },
+//     function(err, res) {
+//       if (err) throw err;
+//       console.log(res.affectedRows + " department inserted!\n");
+//       // Call updateProduct AFTER the INSERT completes
+//       updateProduct();
+//     }
+//   );
+
+//   // logs the actual query being run
+//   console.log(query.sql);
+// }
+
+// function updateProduct() {
+//   console.log("Updating all Rocky Road quantities...\n");
+//   var query = connection.query(
+//     "UPDATE products SET ? WHERE ?",
+//     [
+//       {
+//         quantity: 100
+//       },
+//       {
+//         flavor: "Rocky Road"
+//       }
+//     ],
+//     function(err, res) {
+//       if (err) throw err;
+//       console.log(res.affectedRows + " products updated!\n");
+//       // Call deleteProduct AFTER the UPDATE completes
+//       deleteProduct();
+//     }
+//   );
