@@ -47,25 +47,25 @@ function updateDepartment(answer) {
         name: "newName",
 
       },
-   ])
-   // console.log("What do you want to rename the Hiring Department...\n");
-      var query = connection.query(
-        "UPDATE department SET ? WHERE ?",
-        [
-          {
-            name: "new lucky hires",
-         
-          },
-         {
-           id: 1
-         }
-        ],
-        function(err, res) {
-          if (err) throw err;
-          console.log(res.affectedRows + " Hiring Department updated!\n");
-        employeeTracker();
-        });
-        
+    ])
+  // console.log("What do you want to rename the Hiring Department...\n");
+  var query = connection.query(
+    "UPDATE department SET ? WHERE ?",
+    [
+      {
+        name: "new lucky hires",
+
+      },
+      {
+        id: 1
+      }
+    ],
+    function (err, res) {
+      if (err) throw err;
+      console.log(res.affectedRows + " Hiring Department updated!\n");
+      employeeTracker();
+    });
+
 }
 
 function createRole() {
@@ -101,8 +101,8 @@ function createRole() {
         },
         function (err) {
           if (err) throw err;
-          console.log("You created a new role");          
-       employeeTracker();
+          console.log("You created a new role");
+          employeeTracker();
         }
       );
     });
@@ -115,11 +115,58 @@ function viewEmployee() {
     if (err) throw err;
     // Log all results of the SELECT statement
     console.log(res);
-    connection.end();
-employeeTracker();
+    //  connection.end();
+    adjustEmployee();
   })
 }
 
+function adjustEmployee() {
+  inquirer
+    .prompt({
+      name: "action",
+      type: "list",
+      message: "Employee Scott Morrison has been late to work lately.  Do you want to keep or fire him?",
+      choices: ["Keep", "Fire"]
+    })
 
 
+    .then(function (answer) {
+      if (answer.action === "Keep") {
+        employeeTracker();
+      }
+      else if (answer.action === "Fire") {
+        deleteEmployee();
+      }
 
+    });
+}
+function deleteEmployee() {
+
+  console.log("Scott Morrison has been fired...\n");
+  connection.query(
+    "DELETE FROM employee WHERE ?",
+    {
+      id: 0,
+    
+
+    },
+    function (err, res) {
+      if (err) throw err;
+      connection.end();
+      console.log(res.affectedRows + " employee deleted!\n");
+     // viewEmployee();
+    }
+  );
+}
+
+
+// function viewEmployee() {
+//   console.log("Selecting all products...\n");
+//   connection.query("SELECT * FROM employee", function (err, res) {
+//     if (err) throw err;
+//     // Log all results of the SELECT statement
+//     console.log(res);
+//     adjustEmployee();
+//     connection.end();
+//   })
+// }
