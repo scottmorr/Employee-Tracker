@@ -1,7 +1,7 @@
-var mysql = require("mysql");
-var inquirer = require("inquirer");
-var consoletable = require("console.table");
-var connection = mysql.createConnection({
+const mysql = require("mysql");
+const { prompt } = require("inquirer");
+require("console.table");
+const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
 
@@ -17,8 +17,7 @@ connection.connect(function (err) {
 });
 
 function employeeTracker() {
-  inquirer
-    .prompt({
+    prompt({
       name: "action",
       type: "list",
       message: "Which would you like to do? Update Hiring Department, create a role, or view employee list?",
@@ -39,50 +38,67 @@ function employeeTracker() {
 }
 
 function updateDepartment(answer) {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "What do you want to rename the Hiring Department?",
-        name: "newName",
+    // prompt([
+    //   {
+    //     type: "input",
+    //     message: "What do you want to rename the Hiring Department?",
+    //     name: "newName",
 
+    //   },
+      prompt({
+        name: "action",
+        type: "list",
+        message: "Do you want to change the name from Hiring Department to new lucky hires?",
+        choices: ["Change", "Keep"]
+      })
+
+      .then(function (answer) {
+        if (answer.action === "Change") {
+          changeDepartment();
+        }
+        else if (answer.action === "Keep") {
+          employeeTracker();
+        }
+  
+      });
+    }
+
+
+
+   function changeDepartment() {
+   var query = connection.query(
+     "UPDATE department SET ? WHERE ?",
+     [
+      
+       {
+         id: 1,
+         
       },
-    ])
-  // console.log("What do you want to rename the Hiring Department...\n");
-  var query = connection.query(
-    "UPDATE department SET ? WHERE ?",
-    [
       {
-        name: "new lucky hires",
-
-      },
-      {
-        id: 1
-      }
-    ],
-    function (err, res) {
-      if (err) throw err;
-      console.log(res.affectedRows + " Hiring Department updated!\n");
-      employeeTracker();
-    });
-
+        name: "new lucky hires"
+       }
+     ],
+     function (err, res) {
+       if (err) throw err;
+       console.log(res.affectedRows + " Hiring Department has been renamed to new lucky hires!\n");
+       employeeTracker();
+     }
+   );
 }
 
+
 function createRole() {
-  inquirer
-    .prompt([
+    prompt([
       {
         type: "input",
         message: "What is the new role title?",
         name: "rollTitle",
       },
-
       {
         type: "input",
         message: "What is the salary per hour for new role?",
         name: "hourlySalary",
       },
-
       {
         type: "input",
         message: "What is the department id for this new role?",
@@ -114,15 +130,15 @@ function viewEmployee() {
   connection.query("SELECT * FROM employee", function (err, res) {
     if (err) throw err;
     // Log all results of the SELECT statement
-    console.log(res);
+    console.table(res);
     //  connection.end();
     adjustEmployee();
   })
 }
 
 function adjustEmployee() {
-  inquirer
-    .prompt({
+  
+    prompt({
       name: "action",
       type: "list",
       message: "Employee Scott Morrison has been late to work lately.  Do you want to keep or fire him?",
@@ -140,13 +156,13 @@ function adjustEmployee() {
 
     });
 }
-function deleteEmployee() {
+async function deleteEmployee() {
+  const employees = await 
 
-  console.log("Scott Morrison has been fired...\n");
   connection.query(
-    "DELETE FROM employee WHERE ?",
+    "DELETE FROM employee WHERE  ?",
     {
-      id: 0,
+      id: 1,
     
 
     },
@@ -154,7 +170,7 @@ function deleteEmployee() {
       if (err) throw err;
       connection.end();
       console.log(res.affectedRows + " employee deleted!\n");
-     // viewEmployee();
+     // console.table(res);
     }
   );
 }
