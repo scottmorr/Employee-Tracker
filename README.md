@@ -6,4 +6,4 @@ data with this Tracker.
 Node Express, mysql, npm Inquirer, and npm console.table were all used to create the Tracker. 
 
 
-https://scottmorr.github.io/Employee-Tracker/
+https://scottmorr.github.io/Employee-Tracker
