@@ -170,19 +170,8 @@ async function deleteEmployee() {
       if (err) throw err;
       connection.end();
       console.log(res.affectedRows + " employee deleted!\n");
-     // console.table(res);
+     employeeTracker();
     }
   );
 }
 
-
-// function viewEmployee() {
-//   console.log("Selecting all products...\n");
-//   connection.query("SELECT * FROM employee", function (err, res) {
-//     if (err) throw err;
-//     // Log all results of the SELECT statement
-//     console.log(res);
-//     adjustEmployee();
-//     connection.end();
-//   })
-// }
